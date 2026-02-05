@@ -1,0 +1,21 @@
+#!/bin/bash
+# /etc/networkd-dispatcher/routable.d/{{ wireguard_interface }}_up.sh
+
+# wireguard interface is now routable - time to run postup commands
+if [[ "$IFACE" == "{{ wireguard_interface }}" && "$OperationalState" == "routable" ]]; then
+    logger "{{ wireguard_interface }} is up - running pre and post up commands..."
+
+    # preup
+{% if wireguard_preup is defined %}
+{% for wg_preup in wireguard_preup %}
+    {{ wg_preup | replace("%i", "$IFACE") }}
+{% endfor %}
+{% endif %}
+
+    # postup
+{% if wireguard_postup is defined %}
+{% for wg_postup in wireguard_postup %}
+    {{ wg_postup | replace("%i", "$IFACE") }}
+{% endfor %}
+{% endif %}
+fi

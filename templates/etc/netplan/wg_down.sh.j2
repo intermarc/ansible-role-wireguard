@@ -1,0 +1,24 @@
+#!/bin/bash
+# /etc/networkd-dispatcher/off.d/{{ wireguard_interface }}_down.sh
+
+# wireguard interface is now routable - time to run postup commands
+if [[ "$IFACE" == "{{ wireguard_interface }}" && "$OperationalState" == "off" ]]; then
+    logger "{{ wireguard_interface }} is down - running pre and post down commands..."
+
+    # predown
+{% if wireguard_predown is defined %}
+{% for wg_predown in wireguard_predown %}
+    {{ wg_predown | replace("%i", "$IFACE") }}
+{% endfor %}
+{% endif %}
+
+    # postdown
+{% if wireguard_postdown is defined %}
+{% for wg_postdown in wireguard_postdown %}
+    {{ wg_postdown | replace("%i", "$IFACE") }}
+{% endfor %}
+{% endif %}
+fi
+
+# ignore errors encountered when this script runs before the up script has run 
+exit 0
