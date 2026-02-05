@@ -124,6 +124,10 @@ wireguard_ubuntu_cache_valid_time: "3600"
 # Set to "true" if you want to use netplan to configure WireGuard.
 wireguard_ubuntu_use_netplan: false
 
+# name of the networkd-dispatcher scripts for postup/postdown commands
+dispatcher_script_up_filename: "/etc/networkd-dispatcher/routable.d/{{ wireguard_interface }}_up.sh"
+dispatcher_script_down_filename: "/etc/networkd-dispatcher/off.d/{{ wireguard_interface }}_down.sh"
+
 #########################################
 # Settings only relevant for RockyLinux 8
 #########################################

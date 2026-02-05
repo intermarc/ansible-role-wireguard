@@ -26,3 +26,9 @@
   ansible.builtin.apt:
     name: "wireguard"
     state: present
+
+- name: (Ubuntu) Install networkd-dispatcher package
+  ansible.builtin.apt:
+    name: "networkd-dispatcher"
+    state: present
+  when: wireguard_ubuntu_use_netplan

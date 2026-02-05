@@ -177,6 +177,24 @@
   notify:
     - "reconfigure {{ 'wireguard' if not wireguard_ubuntu_use_netplan else 'netplan' }}"
 
+- name: Generate WireGuard networkd-dispatcher scripts
+  when: wireguard_ubuntu_use_netplan
+  block:
+    - name: up-script
+      ansible.builtin.template:
+        src: "etc/netplan/wg_up.sh.j2"
+        dest: "{{ dispatcher_script_up_filename }}"
+        owner: "{{ wireguard_conf_owner }}"
+        group: "{{ wireguard_conf_group }}"
+        mode: "0755"
+    - name: down-script
+      ansible.builtin.template:
+        src: "etc/netplan/wg_down.sh.j2"
+        dest: "{{ dispatcher_script_down_filename }}"
+        owner: "{{ wireguard_conf_owner }}"
+        group: "{{ wireguard_conf_group }}"
+        mode: "0755"
+
 - name: Ensure legacy reload-module-on-update is absent
   ansible.builtin.file:
     dest: "{{ wireguard_remote_directory }}/.reload-module-on-update"
