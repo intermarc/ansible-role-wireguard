@@ -202,6 +202,12 @@
   tags:
     - wg-config
 
+- name: Allow UDP traffic to WireGuard port
+  community.general.ufw:
+    rule: allow
+    port: "{{ wireguard_port }}"
+    proto: udp
+
 - name: Start and enable WireGuard service
   ansible.builtin.service:
     name: "wg-quick@{{ wireguard_interface }}"
